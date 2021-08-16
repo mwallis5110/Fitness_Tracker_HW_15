@@ -1,50 +1,70 @@
 const router = require("express").Router();
-const Workouts = require("../../models/workouts.js")
-const path = require("path");
+const Workouts = require("../../models/workouts.js");
+// const path = require("path");
 
 router.get("/api/workouts", (req, res) => {
   Workouts.findOne({})
-    .sort({day: -1}) //Day or date?
-    .then(Workouts => {
+    .sort({ date: -1 })
+    .then((Workouts) => {
       res.json(Workouts);
     })
-    .catch(err => {
-      res.status("api/workouts GET route not working").json(err)
+    .catch((err) => {
+      res.status().json(err);
+      console.log("api/workouts GET route not working");
     });
 });
 
 router.put("/api/workouts/:id", (req, res) => {
-  Workouts.findById(req.params.id)
-    .then(Workouts => {
+  Workouts.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      
+      $push: { excercises: req.body },
+    },
+    { new: true }
+  )
+    .then((Workouts) => {
       res.json(Workouts);
     })
 
-    .catch(err => {
-      res.status("api/workouts/:id PUT route not working").json(err)
-  });
+    .catch((err) => {
+      res.json(err);
+      console.log("api/workouts/:id PUT route not working");
+    });
 });
 
-// router.post("/api/workouts", (req, res) => {
-//    Workouts.insertMany()
-//      .then((Workouts) => {
-//        res.json(Workouts);
-//      })
+router.post("/api/workouts", (req, res) => {
+  Workouts.insertMany()
+    .then((Workouts) => {
+      res.json(Workouts);
+    })
 
-//      .catch((err) => {
-//        res.status("api/workouts POST route not working").json(err);
-//      });
-// });
+    .catch((err) => {
+      res.json(err);
+      console.log("api/workouts POST route not working");
+    });
+});
 
-router.get("/api/workouts/range", (req, res) => { //Where is 'range' coming from?
+router.get("/api/workouts/range", (req, res) => {
+  Workouts.aggregate([
+    {
+      $addFields: {
+        totalDuration: {
+          $sum: "$exercises.duration",
+        },
+      },
+    },
+  ])
 
-  // Workouts.find({})
-//    .sort({ })
-//     .then(Workouts => {
-//       res.json(Workouts);
-//     })
-//     .catch(err => {
-//       res.status("api/workouts/range GET route not working").json(err)
-//     });
+    .sort({ date: -1 })
+    .limit(7)
+    .then((Workouts) => {
+      res.json(Workouts);
+    })
+    .catch((err) => {
+      res.json(err);
+      console.log("api/workouts/range GET route not working");
+    });
 });
 
 module.exports = router;
