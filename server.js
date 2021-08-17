@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 3000;
 const viewRoutes = require("./routes/view/viewRoutes.js");
 const apiRoutes = require("./routes/api/apiRoutes.js"); 
 
-
 const app = express();
 
 app.use(logger("dev"));

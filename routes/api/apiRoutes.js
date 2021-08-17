@@ -5,8 +5,8 @@ const Workouts = require("../../models/workouts.js");
 router.get("/api/workouts", (req, res) => {
   Workouts.findOne({})
     .sort({ date: -1 })
-    .then((Workouts) => {
-      res.json(Workouts);
+    .then((workoutsdb) => {
+      res.json(workoutsdb);
     })
     .catch((err) => {
       res.status().json(err);
@@ -16,14 +16,14 @@ router.get("/api/workouts", (req, res) => {
 
 router.put("/api/workouts/:id", (req, res) => {
   Workouts.findOneAndUpdate(
-    { _id: req.params.id },
+    { _id: params.id },
     {
       $push: { excercises: req.body },
     },
     { new: true }
   )
-    .then((Workouts) => {
-      res.json(Workouts);
+    .then((workoutsdb) => {
+      res.json(workoutsdb);
     })
 
     .catch((err) => {
@@ -33,9 +33,9 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 router.post("/api/workouts", (req, res) => {
-  Workouts.insertMany()
-    .then((Workouts) => {
-      res.json(Workouts);
+  Workouts.create(req.body)
+    .then((workoutsdb) => {
+      res.json(workoutsdb);
     })
 
     .catch((err) => {
@@ -54,11 +54,10 @@ router.get("/api/workouts/range", (req, res) => {
       },
     },
   ])
-
     .sort({ date: -1 })
     .limit(7)
-    .then((Workouts) => {
-      res.json(Workouts);
+    .then((workoutsdb) => {
+      res.json(workoutsdb);
     })
     .catch((err) => {
       res.json(err);
