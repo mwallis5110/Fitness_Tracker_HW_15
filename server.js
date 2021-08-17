@@ -20,6 +20,8 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessTrackerDB", {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 
 app.use(viewRoutes);
