@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Workouts = require("../../models/workouts.js");
+// const viewRoutes = require("../view/viewRoutes.js");
+// router.use("/view", viewRoutes)
 // const path = require("path");
 
 router.get("/api/workouts", (req, res) => {
