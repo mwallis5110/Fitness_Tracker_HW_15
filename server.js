@@ -5,8 +5,7 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
 
-const viewRoutes = require("./routes/view/viewRoutes.js");
-const apiRoutes = require("./routes/api/apiRoutes.js"); 
+const viewRoutes = require("./routes/routes.js");
 
 const app = express();
 
@@ -23,7 +22,7 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessTrackerD
   useFindAndModify: false
 });
 
-// app.use("/api", apiRoutes);
+
 app.use("/", viewRoutes);
 
 app.listen(PORT, () => {
